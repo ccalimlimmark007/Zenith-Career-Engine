@@ -81,24 +81,64 @@
             cursor: pointer;
             pointer-events: auto;
         }
+        .likert-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        width: 100%;
+    }
+    .likert-labels {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        font-size: 0.7rem;
+        color: #aaa;
+        padding: 0 5px;
+    }
+    .likert-dots {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        gap: 8px;
+    }
+    .dot-btn {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        border: 2px solid #555;
+        background: #222;
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .dot-btn:hover {
+        background: #4CAF50;
+        border-color: #fff;
+        transform: scale(1.1);
+    }
+
     </style>
 </head>
 <body>
-<div class="stats-panel">
-    <div style="color: #888; margin-bottom: 10px; font-size: 0.8rem;">REAL-TIME TRAITS</div>
-    <div class="stat-line">Personality: <span id="s-pers" class="stat-val">0</span></div>
-    <div class="stat-line">Behavior: <span id="s-beha" class="stat-val">0</span></div>
-    <div class="stat-line">Skills: <span id="s-skil" class="stat-val">0</span></div>
-    <div class="stat-line">Market: <span id="s-mark" class="stat-val">0</span></div>
-</div>
     <canvas id="saga-map"></canvas>
-
     <div class="ui-overlay">
         <div class="question-card">
-            <div class="question" id="question-text">Loading Journey...</div>
-            <div class="choices" id="choices-container"></div>
+            <div id="question-text" class="question"></div>
+            <div id="choices-container" class="choices"></div>
         </div>
     </div>
+    <div class="stats-panel">
+        <div style="color: #888; margin-bottom: 10px; font-size: 0.8rem;">REAL-TIME TRAITS</div>
+        <div class="stat-line">OCEAN: <span id="s-pers" class="stat-val">0</span></div>
+        <div class="stat-line">RIASEC: <span id="s-beha" class="stat-val">0</span></div>
+        <div class="stat-line">SJT: <span id="s-skil" class="stat-val">0</span></div>
+    </div>
+
 
     <button id="restart-btn">Restart Journey</button>
 
@@ -147,58 +187,127 @@
                     questionEl.textContent = "Error connecting to server. Make sure app.py is running!";
                 }
             }
-
-            function renderQuestion(data) {
-    if (data.end) {
-        questionEl.innerHTML = "<h2>Zenith Reached</h2><p>Your Career Persona is being analyzed...</p>";
-        choicesEl.innerHTML = `<button class="choice-btn" onclick="location.reload()">Start New Journey</button>`;
-        return;
-    }
-
-    // Update Scores in UI
-    if (data.trait_summary) {
-        const sum = (obj) => Object.values(obj).reduce((a, b) => a + b, 0);
-        document.getElementById('s-pers').textContent = sum(data.trait_summary.personality);
-        document.getElementById('s-beha').textContent = sum(data.trait_summary.behavior);
-        document.getElementById('s-skil').textContent = sum(data.trait_summary.skills);
-        document.getElementById('s-mark').textContent = sum(data.trait_summary.market);
-    }
-
-    // Rest of your existing renderQuestion code...
-    questionCard.style.opacity = 0;
-    setTimeout(() => {
-        questionEl.innerHTML = `<small style="color:${data.color}">${data.phase}</small><br>${data.question}`;
-        choicesEl.innerHTML = '';
-        data.choices.forEach((text, i) => {
-            const btn = document.createElement('div');
-            btn.classList.add('choice-btn');
-            btn.textContent = text;
-            btn.onclick = () => handleChoice(i);
-            choicesEl.appendChild(btn);
-        });
-        questionCard.style.opacity = 1;
-    }, 500);
+            
+            function showFinalResults(data) {
+    const result = data.ai_result;
+    
+    // 1. Remove the 'vibe' element
+    // 2. Map 'alternatives' instead of 'pathway'
+    questionEl.innerHTML = `
+        <div style="color: #4CAF50; font-size: 0.8rem; margin-bottom: 10px;">ZENITH ANALYSIS COMPLETE</div>
+        <h2 style="font-size: 1.8rem; margin: 10px 0;">${result.title}</h2>
+        <hr style="border: 0.5px solid #444; margin: 20px 0;">
+        <p style="text-align: left; font-size: 0.95rem; line-height: 1.4;">${result.match_reason}</p>
+        
+        <div style="text-align: left; margin-top: 20px;">
+            <strong style="color: #888; font-size: 0.8rem; letter-spacing: 1px;">SIMILAR ARCHETYPES:</strong>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;">
+                ${result.alternatives.map(alt => `
+                    <span style="background: #333; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; border: 1px solid #444;">
+                        ${alt}
+                    </span>
+                `).join('')}
+            </div>
+        </div>
+    `;
+    
+    choicesEl.innerHTML = `<button class="choice-btn" style="margin-top:20px;" onclick="location.reload()">Reset Journey</button>`;
 }
 
-            async function handleChoice(index) {
-                if (state !== 'AWAITING_CHOICE') return;
+function renderQuestion(data) {
+        if (data.end) {
+            questionEl.innerHTML = "<h2>Zenith Reached</h2><p>Your Career Persona is being analyzed...</p>";
+            choicesEl.innerHTML = `<button class="choice-btn" onclick="location.reload()">Start New Journey</button>`;
+            return;
+        }
+    // Update Scores in UI
+    if (data.trait_summary) {
+            const sum = (obj) => Object.values(obj).reduce((a, b) => a + b, 0);
+            document.getElementById('s-pers').textContent = sum(data.trait_summary.ocean || {});
+            document.getElementById('s-beha').textContent = sum(data.trait_summary.riasec || {});
+            document.getElementById('s-skil').textContent = sum(data.trait_summary.sjt || {});
+        }
+
+        questionCard.style.opacity = 0;
+    // Rest of your existing renderQuestion code...
+    setTimeout(() => {
+            questionEl.innerHTML = `<small style="color:${data.color}">${data.phase}</small><br>${data.question}`;
+            choicesEl.innerHTML = '';
+
+            // 2. DYNAMIC UI SWITCHING
+            if (data.type === 'likert') {
+                // Render 7 dots
+                const container = document.createElement('div');
+                container.className = 'likert-container';
                 
-                const res = await fetch('/next', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ choice_index: index })
+                const labels = document.createElement('div');
+                labels.className = 'likert-labels';
+                labels.innerHTML = `<span>Disagree</span><span>Neutral</span><span>Agree</span>`;
+                
+                const dots = document.createElement('div');
+                dots.className = 'likert-dots';
+                
+                for (let i = 1; i <= 7; i++) {
+                    const dot = document.createElement('button');
+                    dot.className = 'dot-btn';
+                    dot.textContent = i;
+                    dot.onclick = () => handleChoice(i);
+                    dots.appendChild(dot);
+                }
+                
+                container.appendChild(labels);
+                container.appendChild(dots);
+                choicesEl.appendChild(container);
+            } else {
+                // Render 4 choice buttons
+                data.choices.forEach((text, i) => {
+                    const btn = document.createElement('div');
+                    btn.classList.add('choice-btn');
+                    btn.textContent = text;
+                    btn.onclick = () => handleChoice(i);
+                    choicesEl.appendChild(btn);
                 });
-                const nextData = await res.json();
-
-                const chosenIndex = index % ephemeralLinks.length;
-                ephemeralLinks[chosenIndex].isChosen = true;
-
-                state = 'CHOOSING';
-                animationStartTime = performance.now();
-                window.nextQuestionData = nextData;
-                requestAnimationFrame(animationLoop);
             }
+            
+            questionCard.style.opacity = 1;
+        }, 500);
+    }
 
+    async function handleChoice(index) {
+        // Prevent clicking while animating
+        if (state !== 'AWAITING_CHOICE') return;
+        
+        const res = await fetch('/next', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ choice_index: index })
+        });
+        const nextData = await res.json();
+
+        // Last question: server returns end + ai_result — skip path animation (no next node / color).
+        if (nextData.end) {
+            if (nextData.ai_result) {
+                showFinalResults(nextData);
+            } else {
+                renderQuestion(nextData);
+            }
+            state = 'AWAITING_CHOICE';
+            draw();
+            return;
+        }
+
+        // 3. CANVAS LOGIC: Path Generation
+        // If it's a likert question, we force it to use one of the 4 visual paths 
+        // to keep the map clean, or you can expand this to 7 paths.
+        const pathIndex = (typeof index === 'number' && index <= 3) ? index : index % 4;
+        
+        ephemeralLinks[pathIndex].isChosen = true;
+
+        state = 'CHOOSING';
+        animationStartTime = performance.now();
+        window.nextQuestionData = nextData;
+        requestAnimationFrame(animationLoop);
+    }
             function generateAndShowNextChoices(parentNode) {
     const distance = 200;
     const verticalSpread = 150; // Increased spread for 4 nodes

@@ -1,0 +1,157 @@
+{
+    "questions": [
+      {
+        "id": 1,
+        "phase": "OCEAN",
+        "trait": "Extraversion",
+        "type": "likert",
+        "q": "I am outgoing and sociable.",
+        "reverse": false
+      },
+      {
+        "id": 2,
+        "phase": "OCEAN",
+        "trait": "Agreeableness",
+        "type": "likert",
+        "q": "I am skeptical and competitive.",
+        "reverse": true
+      },
+      {
+        "id": 3,
+        "phase": "OCEAN",
+        "trait": "Conscientiousness",
+        "type": "likert",
+        "q": "I tend to be a bit disorganized.",
+        "reverse": true
+      },
+      {
+        "id": 4,
+        "phase": "OCEAN",
+        "trait": "Neuroticism",
+        "type": "likert",
+        "q": "I am calm and stable under pressure.",
+        "reverse": false
+      },
+      {
+        "id": 5,
+        "phase": "OCEAN",
+        "trait": "Openness",
+        "type": "likert",
+        "q": "I love complex, abstract ideas.",
+        "reverse": false
+      },
+      {
+        "id": 6,
+        "phase": "RIASEC",
+        "trait": "Realistic",
+        "type": "likert",
+        "q": "I like hands-on projects, like building things, fixing gear, or working outdoors.",
+        "reverse": false
+      },
+      {
+        "id": 7,
+        "phase": "RIASEC",
+        "trait": "Investigative",
+        "type": "likert",
+        "q": "I enjoy digging into the 'why' of things, analyzing data, or solving complex problems.",
+        "reverse": false
+      },
+      {
+        "id": 8,
+        "phase": "RIASEC",
+        "trait": "Artistic",
+        "type": "likert",
+        "q": "I’m at my best when I’m creating something original, whether it’s design, music, or writing.",
+        "reverse": false
+      },
+      {
+        "id": 9,
+        "phase": "RIASEC",
+        "trait": "Social",
+        "type": "likert",
+        "q": "I get a lot out of mentoring others, giving advice, or working directly to help people.",
+        "reverse": false
+      },
+      {
+        "id": 10,
+        "phase": "RIASEC",
+        "trait": "Enterprising",
+        "type": "likert",
+        "q": "I like taking charge of a project, pitching new ideas, and rallying a team to get things done.",
+        "reverse": false
+      },
+      {
+        "id": 11,
+        "phase": "RIASEC",
+        "trait": "Conventional",
+        "type": "likert",
+        "q": "I’m satisfied when I can organize a system and make sure every detail is 100% accurate.",
+        "reverse": false
+      },
+      {
+        "id": 12,
+        "phase": "SJT",
+        "trait": "Problem Solving",
+        "type": "choice",
+        "q": "One section of your group project is unfinished and a teammate is unresponsive. What do you do?",
+        "opts": [
+          "Take over the unfinished section yourself.",
+          "Reach out to the teammate directly to understand and help.",
+          "Organize a group meeting to redistribute work.",
+          "Document contributions and escalate to a supervisor."
+        ]
+      },
+      {
+        "id": 13,
+        "phase": "SJT",
+        "trait": "Leadership",
+        "type": "choice",
+        "q": "A community event needs a leader, but no one has stepped up. What do you do?",
+        "opts": [
+          "Volunteer to lead and assign tasks immediately.",
+          "Share ideas with the group and let them decide who leads.",
+          "Create a simple plan/checklist the group can follow.",
+          "Focus on one creative aspect you can develop well alone."
+        ]
+      },
+      {
+        "id": 14,
+        "phase": "SJT",
+        "trait": "Adaptability",
+        "type": "choice",
+        "q": "Your assignment has few instructions and any format is allowed. What do you do?",
+        "opts": [
+          "Stick to a professional written report.",
+          "Choose a creative format like a short film.",
+          "Research the most effective format first, then decide.",
+          "Coordinate with classmates to ensure variety."
+        ]
+      },
+      {
+        "id": 15,
+        "phase": "SJT",
+        "trait": "Collaboration",
+        "type": "choice",
+        "q": "A classmate who scored poorly asks for tutoring, but it would take from your own prep time. What do you do?",
+        "opts": [
+          "Agree to tutor them; helping others is more meaningful.",
+          "Politely decline to maintain your own performance.",
+          "Suggest forming a small study group to share the effort.",
+          "Share your notes so they can learn independently."
+        ]
+      },
+      {
+        "id": 16,
+        "phase": "SJT",
+        "trait": "Prioritization",
+        "type": "choice",
+        "q": "An urgent task with a tight deadline lands on your plate during a personal project. What do you do?",
+        "opts": [
+          "Drop the personal project and focus on the urgent task.",
+          "Work extra hours to try and do both.",
+          "Negotiate a more realistic deadline for the urgent task.",
+          "Find a creative way to combine parts of both tasks."
+        ]
+      }
+    ]
+  }
